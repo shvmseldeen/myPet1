@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pet Care Center | Our Doctors</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        navy: { 50: '#E8EBF0', 100: '#C5CCD9', 200: '#8B99B3', 300: '#51668D', 400: '#2D4470', 500: '#1B2A4A', 600: '#152240', 700: '#0F1B33', 800: '#0A1226', 900: '#050913' },
+                        gold: { 50: '#FBF7ED', 100: '#F3E8C6', 200: '#E5D08E', 300: '#D4BA82', 400: '#C5A55A', 500: '#B8923E', 600: '#9A7A33', 700: '#7C6229', 800: '#5E4A1F', 900: '#403214' },
+                        ivory: { 50: '#FEFDFB', 100: '#FAF8F5', 200: '#F5F0E8', 300: '#EDE5D8', 400: '#E0D4C1' }
+                    },
+                    fontFamily: { sans: ['Montserrat', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="toast-container" class="fixed top-24 right-4 z-[100] flex flex-col gap-3"></div>
+
+<nav id="navbar" class="fixed top-0 left-0 right-0 z-50 bg-ivory-100/90 backdrop-blur-md border-b border-navy-500/10 transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-16 lg:h-20">
+            <a href="index.html" class="flex items-center gap-2 group">
+                <div class="w-10 h-10 rounded-xl bg-navy-500 flex items-center justify-center group-hover:bg-gold-400 transition-colors duration-300">
+                    <i class="fas fa-paw text-ivory-100 text-lg"></i>
+                </div>
+                <span class="text-xl font-bold text-navy-500">My<span class="text-gold-400">Pet</span></span>
+            </a>
+            <div class="hidden lg:flex items-center gap-8">
+                <a href="index.html" class="nav-link text-sm font-medium text-navy-500 hover:text-gold-400">Home</a>
+                <a href="services.html" class="nav-link text-sm font-medium text-navy-500 hover:text-gold-400">Services</a>
+                <a href="shop.html" class="nav-link text-sm font-medium text-navy-500 hover:text-gold-400">Shop</a>
+                <a href="doctors.html" class="nav-link text-sm font-medium text-navy-500 hover:text-gold-400 active-link">Our Doctors</a>
+                <a href="mypet.html" class="nav-link text-sm font-medium text-navy-500 hover:text-gold-400">My Pet</a>
+                <a href="appointment.html" class="nav-link text-sm font-medium text-navy-500 hover:text-gold-400">Appointment</a>
+            </div>
+            <div class="flex items-center gap-3">
+                <button onclick="toggleCart()" class="relative p-2 text-navy-500 hover:text-gold-400 transition-colors">
+                    <i class="fas fa-shopping-bag text-lg"></i>
+                    <span id="cart-count" class="absolute -top-1 -right-1 w-5 h-5 bg-gold-400 text-ivory-100 text-[10px] font-bold rounded-full flex items-center justify-center hidden">0</span>
+                </button>
+                <button id="btn-login" onclick="openAuth('login')" class="hidden sm:block btn-outline px-4 py-2 rounded-lg text-xs font-semibold uppercase tracking-wider">Sign In</button>
+                <button id="btn-signup" onclick="openAuth('signup')" class="hidden sm:block btn-gold px-4 py-2 rounded-lg text-xs font-semibold uppercase tracking-wider">Sign Up</button>
+                <button id="btn-logout" onclick="handleLogout()" class="hidden sm:block btn-outline px-4 py-2 rounded-lg text-xs font-semibold uppercase tracking-wider text-red-500 border-red-500 hover:bg-red-500 hover:text-white">Logout</button>
+                <button onclick="toggleMobileMenu()" class="lg:hidden p-2 text-navy-500">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div id="mobile-menu" class="mobile-menu fixed inset-0 z-[60] bg-ivory-100 lg:hidden">
+    <div class="flex items-center justify-between p-4 border-b border-navy-500/10">
+        <span class="text-xl font-bold text-navy-500">My<span class="text-gold-400">Pet</span></span>
+        <button onclick="toggleMobileMenu()" class="p-2 text-navy-500"><i class="fas fa-times text-xl"></i></button>
+    </div>
+    <div class="flex flex-col p-6 gap-4">
+        <a href="index.html" class="text-lg font-medium text-navy-500 py-2 border-b border-ivory-300">Home</a>
+        <a href="services.html" class="text-lg font-medium text-navy-500 py-2 border-b border-ivory-300">Services</a>
+        <a href="shop.html" class="text-lg font-medium text-navy-500 py-2 border-b border-ivory-300">Shop</a>
+        <a href="doctors.html" class="text-lg font-medium text-navy-500 py-2 border-b border-ivory-300">Our Doctors</a>
+        <a href="mypet.html" class="text-lg font-medium text-navy-500 py-2 border-b border-ivory-300">My Pet</a>
+        <a href="appointment.html" class="text-lg font-medium text-navy-500 py-2 border-b border-ivory-300">Appointment</a>
+    </div>
+</div>
+
+<div id="cart-overlay" class="fixed inset-0 z-[70] bg-navy-500/40 hidden" onclick="toggleCart()"></div>
+<div id="cart-panel" class="cart-slide fixed top-0 right-0 w-full max-w-md h-full z-[80] bg-ivory-100 shadow-2xl flex flex-col">
+    <div class="flex items-center justify-between p-6 border-b border-ivory-300">
+        <h3 class="text-lg font-bold text-navy-500"><i class="fas fa-shopping-bag mr-2 text-gold-400"></i>Your Cart</h3>
+        <button onclick="toggleCart()" class="p-2 text-navy-500 hover:text-gold-400 transition-colors"><i class="fas fa-times text-lg"></i></button>
+    </div>
+    <div id="cart-items" class="flex-1 overflow-y-auto p-6">
+        <div id="cart-empty" class="flex flex-col items-center justify-center h-full text-center">
+            <i class="fas fa-shopping-bag text-4xl text-ivory-400 mb-4"></i>
+            <p class="text-navy-200 font-medium">Your cart is empty</p>
+        </div>
+        <div id="cart-list" class="space-y-4 hidden"></div>
+    </div>
+    <div id="cart-footer" class="border-t border-ivory-300 p-6 hidden">
+        <div class="flex justify-between items-center mb-4">
+            <span class="font-semibold text-navy-500">Total</span>
+            <span id="cart-total" class="text-xl font-bold text-gold-400">$0.00</span>
+        </div>
+        <button onclick="checkout()" class="w-full btn-gold py-3 rounded-xl font-semibold text-sm uppercase tracking-wider">Proceed to Checkout</button>
+    </div>
+</div>
+
+<div id="auth-modal" class="modal-overlay fixed inset-0 z-[90] bg-navy-500/50 flex items-center justify-center p-4">
+    <div class="modal-content bg-ivory-100 rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
+        <div class="bg-navy-500 p-6 text-center relative">
+            <button onclick="closeAuth()" class="absolute top-4 right-4 text-ivory-100/60 hover:text-ivory-100 transition-colors"><i class="fas fa-times"></i></button>
+            <div class="w-14 h-14 rounded-2xl bg-gold-400 flex items-center justify-center mx-auto mb-3">
+                <i class="fas fa-paw text-ivory-100 text-2xl"></i>
+            </div>
+            <h2 id="auth-title" class="text-xl font-bold text-ivory-100">Welcome Back</h2>
+        </div>
+        <div id="login-form" class="p-6 space-y-4">
+            <div>
+                <label class="block text-xs font-semibold text-navy-500 uppercase tracking-wider mb-2">Email Address</label>
+                <input type="email" id="login-email" class="w-full px-4 py-3 rounded-xl border border-ivory-300 bg-ivory-50 text-navy-500 text-sm">
+            </div>
+            <div>
+                <label class="block text-xs font-semibold text-navy-500 uppercase tracking-wider mb-2">Password</label>
+                <input type="password" id="login-password" class="w-full px-4 py-3 rounded-xl border border-ivory-300 bg-ivory-50 text-navy-500 text-sm">
+            </div>
+            <button onclick="handleLogin()" class="w-full btn-gold py-3 rounded-xl font-semibold text-sm uppercase tracking-wider">Sign In</button>
+            <p class="text-center text-sm text-navy-300">Don't have an account? <a href="#" onclick="switchAuth('signup')" class="text-gold-400 font-semibold hover:text-gold-500">Sign Up</a></p>
+        </div>
+        <div id="signup-form" class="p-6 space-y-4 hidden">
+            <div>
+                <label class="block text-xs font-semibold text-navy-500 uppercase tracking-wider mb-2">Full Name</label>
+                <input type="text" id="signup-name" class="w-full px-4 py-3 rounded-xl border border-ivory-300 bg-ivory-50 text-navy-500 text-sm">
+            </div>
+            <div>
+                <label class="block text-xs font-semibold text-navy-500 uppercase tracking-wider mb-2">Email</label>
+                <input type="email" id="signup-email" class="w-full px-4 py-3 rounded-xl border border-ivory-300 bg-ivory-50 text-navy-500 text-sm">
+            </div>
+            <div>
+                <label class="block text-xs font-semibold text-navy-500 uppercase tracking-wider mb-2">Phone</label>
+                <input type="text" id="signup-phone" class="w-full px-4 py-3 rounded-xl border border-ivory-300 bg-ivory-50 text-navy-500 text-sm">
+            </div>
+            <div>
+                <label class="block text-xs font-semibold text-navy-500 uppercase tracking-wider mb-2">Password</label>
+                <input type="password" id="signup-password" class="w-full px-4 py-3 rounded-xl border border-ivory-300 bg-ivory-50 text-navy-500 text-sm">
+            </div>
+            <button onclick="handleSignup()" class="w-full btn-gold py-3 rounded-xl font-semibold text-sm uppercase tracking-wider">Create Account</button>
+            <p class="text-center text-sm text-navy-300">Already have an account? <a href="#" onclick="switchAuth('login')" class="text-gold-400 font-semibold hover:text-gold-500">Sign In</a></p>
+        </div>
+    </div>
+</div>
+
+<main>
+    <section class="pt-32 pb-20 lg:pb-28 bg-ivory-200 min-h-screen">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-14 reveal-section">
+                <span class="text-gold-400 text-xs font-semibold uppercase tracking-widest">Our Team</span>
+                <h2 class="text-3xl lg:text-4xl font-bold text-navy-500 mt-3">Meet Our Doctors</h2>
+                <p class="text-navy-300 mt-3 max-w-lg mx-auto">Compassionate professionals dedicated to your pet's health and wellbeing.</p>
+            </div>
+            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 reveal-section">
+                <div class="doctor-card bg-ivory-100 rounded-2xl overflow-hidden border border-ivory-300">
+                    <div class="h-64 overflow-hidden"><img src="https://picsum.photos/seed/doctor1/400/300.jpg" class="w-full h-full object-cover"></div>
+                    <div class="p-6">
+                        <h3 class="text-lg font-bold text-navy-500 mb-1">Dr. Emily Anderson</h3>
+                        <p class="text-gold-400 text-sm font-semibold mb-3">Small Animal Surgery</p>
+                        <p class="text-sm text-navy-300 leading-relaxed mb-4">15+ years of experience in orthopedic and soft tissue surgery.</p>
+                    </div>
+                </div>
+                <div class="doctor-card bg-ivory-100 rounded-2xl overflow-hidden border border-ivory-300">
+                    <div class="h-64 overflow-hidden"><img src="https://picsum.photos/seed/doctor2/400/300.jpg" class="w-full h-full object-cover"></div>
+                    <div class="p-6">
+                        <h3 class="text-lg font-bold text-navy-500 mb-1">Dr. James Marcus</h3>
+                        <p class="text-gold-400 text-sm font-semibold mb-3">Internal Medicine</p>
+                        <p class="text-sm text-navy-300 leading-relaxed mb-4">Specializes in chronic conditions, diagnostics, and feline medicine.</p>
+                    </div>
+                </div>
+                <div class="doctor-card bg-ivory-100 rounded-2xl overflow-hidden border border-ivory-300">
+                    <div class="h-64 overflow-hidden"><img src="https://picsum.photos/seed/doctor3/400/300.jpg" class="w-full h-full object-cover"></div>
+                    <div class="p-6">
+                        <h3 class="text-lg font-bold text-navy-500 mb-1">Dr. Priya Patel</h3>
+                        <p class="text-gold-400 text-sm font-semibold mb-3">Dermatology & Nutrition</p>
+                        <p class="text-sm text-navy-300 leading-relaxed mb-4">Expert in skin conditions, allergies, and personalized nutrition plans.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer class="bg-navy-500 text-ivory-100 py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
+            <div>
+                <div class="flex items-center gap-2 mb-4">
+                    <div class="w-10 h-10 rounded-xl bg-gold-400 flex items-center justify-center"><i class="fas fa-paw text-ivory-100"></i></div>
+                    <span class="text-xl font-bold">My<span class="text-gold-400">Pet</span></span>
+                </div>
+                <p class="text-ivory-100/50 text-sm leading-relaxed">Premium pet care center dedicated to providing the highest quality veterinary services.</p>
+            </div>
+        </div>
+        <div class="border-t border-ivory-100/10 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <p class="text-ivory-100/40 text-xs">&copy; 2025 My Pet. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
