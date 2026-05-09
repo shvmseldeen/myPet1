@@ -11,7 +11,7 @@ let calendarDate = new Date();
 let selectedDate = null;
 let selectedTime = null;
 
-const API_URL = 'http://localhost:5000/api';
+const API_URL = '/api';
 
 const shopProducts = [
     { id: 1, name: 'Premium Kibble', category: 'food', price: 29.99, img: 'https://picsum.photos/seed/petfood1/400/400.jpg', desc: 'Grain-free, high-protein formula' },
