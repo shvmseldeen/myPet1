@@ -1,21 +1,33 @@
 // ========== STATE & LOCAL STORAGE ==========
-let cart = JSON.parse(localStorage.getItem('mypet_cart')) || [];
-let currentUser = JSON.parse(localStorage.getItem('mypet_currentUser')) || null;
-let isLoggedIn = currentUser !== null;
+let cart = [];
+let currentUser = null;
+let isLoggedIn = false;
+let pets = [];
 
-// Initialize empty arrays safely
-if (!localStorage.getItem('mypet_users')) {
-    localStorage.setItem('mypet_users', JSON.stringify([]));
-}
-if (!localStorage.getItem('mypet_orders')) {
-    localStorage.setItem('mypet_orders', JSON.stringify([]));
-}
+// SAFETY NET: This prevents the app from crashing if old data is corrupt!
+try {
+    cart = JSON.parse(localStorage.getItem('mypet_cart')) || [];
+    currentUser = JSON.parse(localStorage.getItem('mypet_currentUser')) || null;
+    isLoggedIn = currentUser !== null;
 
-const defaultPets = [
-    { id: 1, name: 'Max', type: 'Dog', breed: 'Golden Retriever', age: 3, img: 'https://picsum.photos/seed/golden-dog/300/300.jpg', nextVax: '2025-02-15', history: ['Annual checkup - Dec 2024', 'Rabies vaccine - Jun 2024', 'Dental cleaning - Mar 2024'], appointments: ['Grooming - Jan 20, 2025'] },
-    { id: 2, name: 'Luna', type: 'Cat', breed: 'Persian', age: 2, img: 'https://picsum.photos/seed/persian-cat/300/300.jpg', nextVax: '2025-03-10', history: ['FVRCP vaccine - Nov 2024', 'Spay surgery - Aug 2024'], appointments: ['Vet Checkup - Feb 5, 2025'] }
-];
-let pets = JSON.parse(localStorage.getItem('mypet_pets')) || defaultPets;
+    if (!localStorage.getItem('mypet_users')) {
+        localStorage.setItem('mypet_users', JSON.stringify([]));
+    }
+    if (!localStorage.getItem('mypet_orders')) {
+        localStorage.setItem('mypet_orders', JSON.stringify([]));
+    }
+
+    const defaultPets = [
+        { id: 1, name: 'Max', type: 'Dog', breed: 'Golden Retriever', age: 3, img: 'https://picsum.photos/seed/golden-dog/300/300.jpg', nextVax: '2025-02-15', history: ['Annual checkup - Dec 2024', 'Rabies vaccine - Jun 2024', 'Dental cleaning - Mar 2024'], appointments: ['Grooming - Jan 20, 2025'] },
+        { id: 2, name: 'Luna', type: 'Cat', breed: 'Persian', age: 2, img: 'https://picsum.photos/seed/persian-cat/300/300.jpg', nextVax: '2025-03-10', history: ['FVRCP vaccine - Nov 2024', 'Spay surgery - Aug 2024'], appointments: ['Vet Checkup - Feb 5, 2025'] }
+    ];
+    
+    pets = JSON.parse(localStorage.getItem('mypet_pets')) || defaultPets;
+} catch (error) {
+    console.error("Data corrupted. Resetting memory.");
+    localStorage.clear();
+    window.location.reload(); // Refresh immediately to start fresh
+}
 
 let calendarDate = new Date();
 let selectedDate = null;
