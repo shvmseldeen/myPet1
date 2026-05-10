@@ -184,38 +184,44 @@
         </div>
     </section>
 
-    <section class="pt-28 pb-20 lg:pb-28 bg-ivory-200">
+   <section class="pt-28 pb-20 lg:pb-28 bg-ivory-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16 reveal-section">
                 <span class="text-gold-400 text-xs font-semibold uppercase tracking-widest">Simple Process</span>
                 <h2 class="text-3xl lg:text-4xl font-bold text-navy-500 mt-3">How It Works</h2>
                 <p class="text-navy-300 mt-3 max-w-lg mx-auto">Getting started is easy. Four simple steps to give your pet the premium care they deserve.</p>
             </div>
-            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 relative reveal-section">
-                <div class="hidden lg:block step-line" style="top:48px; left:12.5%; width:75%;"></div>
-                <div class="step-item text-center relative z-10">
-                    <div class="w-16 h-16 rounded-full bg-navy-500 text-ivory-100 flex items-center justify-center mx-auto mb-5 text-xl font-bold relative">1
-                        <div class="absolute inset-0 rounded-full bg-gold-400/20 animate-ping"></div>
+            
+            <div class="relative reveal-section">
+                
+                <div class="hidden lg:block absolute step-line z-0" style="top: 32px; left: 12.5%; width: 75%;"></div>
+                
+                <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 relative z-10">
+                    <div class="step-item text-center">
+                        <div class="w-16 h-16 rounded-full bg-navy-500 text-ivory-100 flex items-center justify-center mx-auto mb-5 text-xl font-bold relative">1
+                            <div class="absolute inset-0 rounded-full bg-gold-400/20 animate-ping"></div>
+                        </div>
+                        <h3 class="text-lg font-bold text-navy-500 mb-2">Create Account</h3>
+                        <p class="text-sm text-navy-300 leading-relaxed">Sign up in seconds with your email. It's free and takes less than a minute.</p>
                     </div>
-                    <h3 class="text-lg font-bold text-navy-500 mb-2">Create Account</h3>
-                    <p class="text-sm text-navy-300 leading-relaxed">Sign up in seconds with your email. It's free and takes less than a minute.</p>
-                </div>
-                <div class="step-item text-center relative z-10">
-                    <div class="w-16 h-16 rounded-full bg-gold-400 text-ivory-100 flex items-center justify-center mx-auto mb-5 text-xl font-bold">2</div>
-                    <h3 class="text-lg font-bold text-navy-500 mb-2">Add Your Pet</h3>
-                    <p class="text-sm text-navy-300 leading-relaxed">Create a digital profile with breed, age, medical history, and preferences.</p>
-                </div>
-                <div class="step-item text-center relative z-10">
-                    <div class="w-16 h-16 rounded-full bg-navy-500 text-ivory-100 flex items-center justify-center mx-auto mb-5 text-xl font-bold">3</div>
-                    <h3 class="text-lg font-bold text-navy-500 mb-2">Book Services</h3>
-                    <p class="text-sm text-navy-300 leading-relaxed">Choose a service, pick a date and time that works for you. Simple scheduling.</p>
-                </div>
-                <div class="step-item text-center relative z-10">
-                    <div class="w-16 h-16 rounded-full bg-gold-400 text-ivory-100 flex items-center justify-center mx-auto mb-5 text-xl font-bold">4</div>
-                    <h3 class="text-lg font-bold text-navy-500 mb-2">Enjoy Care</h3>
-                    <p class="text-sm text-navy-300 leading-relaxed">Sit back and let our experts provide top-tier care for your beloved pet.</p>
+                    <div class="step-item text-center">
+                        <div class="w-16 h-16 rounded-full bg-gold-400 text-ivory-100 flex items-center justify-center mx-auto mb-5 text-xl font-bold">2</div>
+                        <h3 class="text-lg font-bold text-navy-500 mb-2">Add Your Pet</h3>
+                        <p class="text-sm text-navy-300 leading-relaxed">Create a digital profile with breed, age, medical history, and preferences.</p>
+                    </div>
+                    <div class="step-item text-center">
+                        <div class="w-16 h-16 rounded-full bg-navy-500 text-ivory-100 flex items-center justify-center mx-auto mb-5 text-xl font-bold">3</div>
+                        <h3 class="text-lg font-bold text-navy-500 mb-2">Book Services</h3>
+                        <p class="text-sm text-navy-300 leading-relaxed">Choose a service, pick a date and time that works for you. Simple scheduling.</p>
+                    </div>
+                    <div class="step-item text-center">
+                        <div class="w-16 h-16 rounded-full bg-gold-400 text-ivory-100 flex items-center justify-center mx-auto mb-5 text-xl font-bold">4</div>
+                        <h3 class="text-lg font-bold text-navy-500 mb-2">Enjoy Care</h3>
+                        <p class="text-sm text-navy-300 leading-relaxed">Sit back and let our experts provide top-tier care for your beloved pet.</p>
+                    </div>
                 </div>
             </div>
+
             <div class="text-center mt-14 reveal-section">
                 <button onclick="openAuth('signup')" class="btn-gold px-10 py-4 rounded-xl font-semibold text-sm uppercase tracking-wider"><i class="fas fa-rocket mr-2"></i>Get Started Now</button>
             </div>
