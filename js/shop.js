@@ -4,6 +4,7 @@ function renderShop(category) {
     if(!grid) return;
     
     const filtered = category === 'all' ? shopProducts : shopProducts.filter(p => p.category === category);
+    
     grid.innerHTML = filtered.map(p => `
         <div class="shop-card bg-ivory-50 rounded-2xl overflow-hidden border border-ivory-300 group" data-category="${p.category}">
             <div class="h-48 overflow-hidden relative">
@@ -25,7 +26,19 @@ function renderShop(category) {
 }
 
 function filterShop(category) {
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    event.target.classList.add('active');
+    // 1. Reset all buttons
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active', 'text-ivory-100', 'bg-navy-500'));
+    
+    // 2. Safely highlight the clicked button
+    if (window.event && window.event.currentTarget) {
+        window.event.currentTarget.classList.add('active', 'text-ivory-100', 'bg-navy-500');
+    }
+    
+    // 3. Render the correct products
     renderShop(category);
+    
+    // 4. Give them a cool little pop animation when sorted!
+    if (typeof gsap !== 'undefined') {
+        gsap.from('.shop-card', { opacity: 0, y: 20, duration: 0.4, stagger: 0.05, ease: 'power2.out' });
+    }
 }
