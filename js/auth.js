@@ -1,6 +1,10 @@
 // ========== AUTHENTICATION ==========
 function openAuth(type) {
     const modal = document.getElementById('auth-modal');
+    if (!modal) return;
+    
+    // Add inline style to override any stuck CSS bugs preventing clicks
+    modal.style.pointerEvents = 'auto'; 
     modal.classList.remove('hidden');
     modal.classList.add('flex');
     switchAuth(type);
@@ -8,6 +12,7 @@ function openAuth(type) {
 
 function closeAuth() {
     const modal = document.getElementById('auth-modal');
+    if (!modal) return;
     modal.classList.add('hidden');
     modal.classList.remove('flex');
 }
@@ -46,6 +51,11 @@ function handleLogout() {
     localStorage.removeItem('mypet_currentUser');
     updateAuthUI();
     showToast('Logged out successfully.', 'info');
+    
+    // Safely reload the page to reset all user data from the screen
+    setTimeout(() => {
+        window.location.reload();
+    }, 1000);
 }
 
 function handleSignup() {
@@ -59,8 +69,12 @@ function handleSignup() {
         return; 
     }
     
-    // SAFETY NET: Default to empty array if storage is totally empty
-    let users = JSON.parse(localStorage.getItem('mypet_users')) || [];
+    let users = [];
+    try {
+        users = JSON.parse(localStorage.getItem('mypet_users')) || [];
+    } catch(e) {
+        users = [];
+    }
     
     if (users.find(u => u.email === email)) {
         showToast('An account with this email already exists!', 'error');
@@ -89,8 +103,13 @@ function handleLogin() {
         return; 
     }
     
-    // SAFETY NET: Default to empty array if storage is totally empty
-    let users = JSON.parse(localStorage.getItem('mypet_users')) || [];
+    let users = [];
+    try {
+        users = JSON.parse(localStorage.getItem('mypet_users')) || [];
+    } catch(e) {
+        users = [];
+    }
+    
     const user = users.find(u => u.email === email && u.password === password);
 
     if (user) {
@@ -101,7 +120,6 @@ function handleLogin() {
         closeAuth();
         showToast(`Welcome back, ${user.name}!`, 'success');
     } else {
-        // Changed the error message to be more helpful
-        showToast('Invalid email. Did you Sign Up on this website first?', 'error');
+        showToast('Invalid email or password.', 'error');
     }
 }
