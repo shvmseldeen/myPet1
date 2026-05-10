@@ -13,7 +13,7 @@
     <script>
         tailwind.config = {
             theme: {
-                extend: {
+                extend: { 
                     colors: {
                         navy: { 50: '#E8EBF0', 100: '#C5CCD9', 200: '#8B99B3', 300: '#51668D', 400: '#2D4470', 500: '#1B2A4A', 600: '#152240', 700: '#0F1B33', 800: '#0A1226', 900: '#050913' },
                         gold: { 50: '#FBF7ED', 100: '#F3E8C6', 200: '#E5D08E', 300: '#D4BA82', 400: '#C5A55A', 500: '#B8923E', 600: '#9A7A33', 700: '#7C6229', 800: '#5E4A1F', 900: '#403214' },
@@ -52,9 +52,13 @@
                     <i class="fas fa-shopping-bag text-lg"></i>
                     <span id="cart-count" class="absolute -top-1 -right-1 w-5 h-5 bg-gold-400 text-ivory-100 text-[10px] font-bold rounded-full flex items-center justify-center hidden">0</span>
                 </button>
-                <button id="btn-login" onclick="openAuth('login')" class="hidden sm:block btn-outline px-4 py-2 rounded-lg text-xs font-semibold uppercase tracking-wider">Sign In</button>
-                <button id="btn-signup" onclick="openAuth('signup')" class="hidden sm:block btn-gold px-4 py-2 rounded-lg text-xs font-semibold uppercase tracking-wider">Sign Up</button>
-                <button id="btn-logout" onclick="handleLogout()" class="hidden sm:block btn-outline px-4 py-2 rounded-lg text-xs font-semibold uppercase tracking-wider text-red-500 border-red-500 hover:bg-red-500 hover:text-white">Logout</button>
+                
+                <div class="hidden sm:flex items-center gap-3">
+                    <button id="btn-login" onclick="openAuth('login')" class="btn-outline px-4 py-2 rounded-lg text-xs font-semibold uppercase tracking-wider">Sign In</button>
+                    <button id="btn-signup" onclick="openAuth('signup')" class="btn-gold px-4 py-2 rounded-lg text-xs font-semibold uppercase tracking-wider">Sign Up</button>
+                    <button id="btn-logout" onclick="handleLogout()" class="btn-outline px-4 py-2 rounded-lg text-xs font-semibold uppercase tracking-wider text-red-500 border-red-500 hover:bg-red-500 hover:text-white" style="display: none;">Logout</button>
+                </div>
+
                 <button onclick="toggleMobileMenu()" class="lg:hidden p-2 text-navy-500">
                     <i class="fas fa-bars text-xl"></i>
                 </button>
@@ -72,153 +76,4 @@
         <a href="index.html" class="text-lg font-medium text-navy-500 py-2 border-b border-ivory-300">Home</a>
         <a href="services.html" class="text-lg font-medium text-navy-500 py-2 border-b border-ivory-300">Services</a>
         <a href="shop.html" class="text-lg font-medium text-navy-500 py-2 border-b border-ivory-300">Shop</a>
-        <a href="doctors.html" class="text-lg font-medium text-navy-500 py-2 border-b border-ivory-300">Our Doctors</a>
-        <a href="mypet.html" class="text-lg font-medium text-navy-500 py-2 border-b border-ivory-300">My Pet</a>
-        <a href="appointment.html" class="text-lg font-medium text-navy-500 py-2 border-b border-ivory-300">Appointment</a>
-    </div>
-</div>
-
-<div id="cart-overlay" class="fixed inset-0 z-[70] bg-navy-500/40 hidden" onclick="toggleCart()"></div>
-<div id="cart-panel" class="cart-slide fixed top-0 right-0 w-full max-w-md h-full z-[80] bg-ivory-100 shadow-2xl flex flex-col">
-    <div class="flex items-center justify-between p-6 border-b border-ivory-300">
-        <h3 class="text-lg font-bold text-navy-500"><i class="fas fa-shopping-bag mr-2 text-gold-400"></i>Your Cart</h3>
-        <button onclick="toggleCart()" class="p-2 text-navy-500 hover:text-gold-400 transition-colors"><i class="fas fa-times text-lg"></i></button>
-    </div>
-    <div id="cart-items" class="flex-1 overflow-y-auto p-6">
-        <div id="cart-empty" class="flex flex-col items-center justify-center h-full text-center">
-            <i class="fas fa-shopping-bag text-4xl text-ivory-400 mb-4"></i>
-            <p class="text-navy-200 font-medium">Your cart is empty</p>
-        </div>
-        <div id="cart-list" class="space-y-4 hidden"></div>
-    </div>
-    <div id="cart-footer" class="border-t border-ivory-300 p-6 hidden">
-        <div class="flex justify-between items-center mb-4">
-            <span class="font-semibold text-navy-500">Total</span>
-            <span id="cart-total" class="text-xl font-bold text-gold-400">$0.00</span>
-        </div>
-        <button onclick="checkout()" class="w-full btn-gold py-3 rounded-xl font-semibold text-sm uppercase tracking-wider">Proceed to Checkout</button>
-    </div>
-</div>
-
-<div id="auth-modal" class="modal-overlay fixed inset-0 z-[90] bg-navy-500/50 flex items-center justify-center p-4">
-    <div class="modal-content bg-ivory-100 rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
-        <div class="bg-navy-500 p-6 text-center relative">
-            <button onclick="closeAuth()" class="absolute top-4 right-4 text-ivory-100/60 hover:text-ivory-100 transition-colors"><i class="fas fa-times"></i></button>
-            <div class="w-14 h-14 rounded-2xl bg-gold-400 flex items-center justify-center mx-auto mb-3">
-                <i class="fas fa-paw text-ivory-100 text-2xl"></i>
-            </div>
-            <h2 id="auth-title" class="text-xl font-bold text-ivory-100">Welcome Back</h2>
-        </div>
-        <div id="login-form" class="p-6 space-y-4">
-            <div>
-                <label class="block text-xs font-semibold text-navy-500 uppercase tracking-wider mb-2">Email Address</label>
-                <input type="email" id="login-email" class="w-full px-4 py-3 rounded-xl border border-ivory-300 bg-ivory-50 text-navy-500 text-sm">
-            </div>
-            <div>
-                <label class="block text-xs font-semibold text-navy-500 uppercase tracking-wider mb-2">Password</label>
-                <input type="password" id="login-password" class="w-full px-4 py-3 rounded-xl border border-ivory-300 bg-ivory-50 text-navy-500 text-sm">
-            </div>
-            <button onclick="handleLogin()" class="w-full btn-gold py-3 rounded-xl font-semibold text-sm uppercase tracking-wider">Sign In</button>
-            <p class="text-center text-sm text-navy-300">Don't have an account? <a href="#" onclick="switchAuth('signup')" class="text-gold-400 font-semibold hover:text-gold-500">Sign Up</a></p>
-        </div>
-        <div id="signup-form" class="p-6 space-y-4 hidden">
-            <div>
-                <label class="block text-xs font-semibold text-navy-500 uppercase tracking-wider mb-2">Full Name</label>
-                <input type="text" id="signup-name" class="w-full px-4 py-3 rounded-xl border border-ivory-300 bg-ivory-50 text-navy-500 text-sm">
-            </div>
-            <div>
-                <label class="block text-xs font-semibold text-navy-500 uppercase tracking-wider mb-2">Email</label>
-                <input type="email" id="signup-email" class="w-full px-4 py-3 rounded-xl border border-ivory-300 bg-ivory-50 text-navy-500 text-sm">
-            </div>
-            <div>
-                <label class="block text-xs font-semibold text-navy-500 uppercase tracking-wider mb-2">Phone</label>
-                <input type="text" id="signup-phone" class="w-full px-4 py-3 rounded-xl border border-ivory-300 bg-ivory-50 text-navy-500 text-sm">
-            </div>
-            <div>
-                <label class="block text-xs font-semibold text-navy-500 uppercase tracking-wider mb-2">Password</label>
-                <input type="password" id="signup-password" class="w-full px-4 py-3 rounded-xl border border-ivory-300 bg-ivory-50 text-navy-500 text-sm">
-            </div>
-            <button onclick="handleSignup()" class="w-full btn-gold py-3 rounded-xl font-semibold text-sm uppercase tracking-wider">Create Account</button>
-            <p class="text-center text-sm text-navy-300">Already have an account? <a href="#" onclick="switchAuth('login')" class="text-gold-400 font-semibold hover:text-gold-500">Sign In</a></p>
-        </div>
-    </div>
-</div>
-
-<main>
-    <section class="pt-32 pb-20 lg:pb-28 bg-ivory-100 min-h-screen">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-14 reveal-section">
-                <span class="text-gold-400 text-xs font-semibold uppercase tracking-widest">Schedule</span>
-                <h2 class="text-3xl lg:text-4xl font-bold text-navy-500 mt-3">Book an Appointment</h2>
-            </div>
-            <div class="grid lg:grid-cols-2 gap-10 reveal-section">
-                
-                <div class="bg-ivory-50 rounded-2xl p-6 border border-ivory-300">
-                    <div class="flex items-center justify-between mb-6">
-                        <button onclick="changeMonth(-1)" class="p-2 rounded-lg hover:bg-ivory-200 text-navy-500 transition-colors"><i class="fas fa-chevron-left"></i></button>
-                        <h3 id="calendar-month" class="text-lg font-bold text-navy-500"></h3>
-                        <button onclick="changeMonth(1)" class="p-2 rounded-lg hover:bg-ivory-200 text-navy-500 transition-colors"><i class="fas fa-chevron-right"></i></button>
-                    </div>
-                    <div class="grid grid-cols-7 gap-1 mb-2 text-center text-xs font-semibold text-navy-200 py-2">
-                        <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
-                    </div>
-                    <div id="calendar-days" class="grid grid-cols-7 gap-1"></div>
-                    <div class="mt-6">
-                        <h4 class="text-sm font-semibold text-navy-500 mb-3">Available Time Slots</h4>
-                        <div id="time-slots" class="grid grid-cols-3 gap-2"></div>
-                    </div>
-                </div>
-                
-                <div class="bg-ivory-50 rounded-2xl p-6 border border-ivory-300">
-                    <h3 class="text-lg font-bold text-navy-500 mb-6"><i class="fas fa-calendar-check text-gold-400 mr-2"></i>Appointment Details</h3>
-                    <div class="space-y-4">
-                        <select id="apt-service" class="w-full px-4 py-3 rounded-xl border border-ivory-300 bg-ivory-100 text-navy-500 text-sm">
-                            <option value="">Choose a service</option>
-                            <option value="Veterinary Care - $50">Veterinary Care — $50</option>
-                            <option value="Grooming - $30">Grooming — $30</option>
-                            <option value="Daycare - $25/day">Daycare — $25/day</option>
-                        </select>
-                        <select id="apt-pet" class="w-full px-4 py-3 rounded-xl border border-ivory-300 bg-ivory-100 text-navy-500 text-sm"></select>
-                        <input type="text" id="apt-date" readonly placeholder="Click a date on the calendar" class="w-full px-4 py-3 rounded-xl border border-ivory-300 bg-ivory-100 text-navy-500 text-sm">
-                        <input type="text" id="apt-time" readonly placeholder="Select a time slot" class="w-full px-4 py-3 rounded-xl border border-ivory-300 bg-ivory-100 text-navy-500 text-sm">
-                        <textarea id="apt-notes" rows="3" placeholder="Any special instructions..." class="w-full px-4 py-3 rounded-xl border border-ivory-300 bg-ivory-100 text-navy-500 text-sm resize-none"></textarea>
-                        
-                        <div id="apt-summary" class="hidden bg-navy-500/5 rounded-xl p-4 border border-navy-500/10">
-                            <h4 class="text-sm font-bold text-navy-500 mb-2">Appointment Summary</h4>
-                            <div id="apt-summary-content" class="text-xs text-navy-300 space-y-1"></div>
-                        </div>
-                        <button onclick="bookAppointment()" class="w-full btn-gold py-4 rounded-xl font-semibold text-sm uppercase tracking-wider">Confirm Booking</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-</main>
-
-<footer class="bg-navy-500 text-ivory-100 py-16">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
-            <div>
-                <div class="flex items-center gap-2 mb-4">
-                    <div class="w-10 h-10 rounded-xl bg-gold-400 flex items-center justify-center"><i class="fas fa-paw text-ivory-100"></i></div>
-                    <span class="text-xl font-bold">My<span class="text-gold-400">Pet</span></span>
-                </div>
-                <p class="text-ivory-100/50 text-sm leading-relaxed">Premium pet care center dedicated to providing the highest quality veterinary services.</p>
-            </div>
-        </div>
-        <div class="border-t border-ivory-100/10 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <p class="text-ivory-100/40 text-xs">&copy; 2025 My Pet. All rights reserved.</p>
-        </div>
-    </div>
-</footer>
-
-<script src="js/state.js"></script>
-<script src="js/ui.js"></script>
-<script src="js/auth.js"></script>
-<script src="js/cart.js"></script>
-<script src="js/shop.js"></script>
-<script src="js/pets.js"></script>
-<script src="js/appointments.js"></script>
-<script src="js/main.js"></script>
-</body>
-</html>
+        <a href="doctors.html" class="text-lg font-medium text-navy-500 py-2
