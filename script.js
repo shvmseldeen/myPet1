@@ -54,12 +54,16 @@ function toggleMobileMenu() {
 
 // ========== AUTHENTICATION (LOCAL STORAGE) ==========
 function openAuth(type) {
-    document.getElementById('auth-modal').classList.add('open');
+    const modal = document.getElementById('auth-modal');
+    modal.classList.remove('hidden');
+    modal.classList.add('flex'); // Adds flexbox to center the modal
     switchAuth(type);
 }
 
 function closeAuth() {
-    document.getElementById('auth-modal').classList.remove('open');
+    const modal = document.getElementById('auth-modal');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex'); // Removes flexbox so 'hidden' works properly
 }
 
 function switchAuth(type) {
