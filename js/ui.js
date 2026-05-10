@@ -24,21 +24,8 @@ function initGSAPAnimations() {
     // Failsafe in case GSAP fails to load from CDN
     if (typeof gsap === 'undefined') return;
 
-    // 1. Hero Text Animation
-    gsap.fromTo('.hero-anim', 
-        { opacity: 0, y: 30 }, 
-        { opacity: 1, y: 0, duration: 0.8, stagger: 0.15, ease: 'power3.out' }
-    );
-
-    // 2. Reveal Page Sections immediately (Fixes the blank screen bug)
-    gsap.fromTo('.reveal-section', 
-        { opacity: 0, y: 30 },
-        { opacity: 1, y: 0, duration: 0.8, stagger: 0.1, ease: 'power3.out' }
-    );
-
-    // 3. Stagger all the individual cards to pop in smoothly
-    gsap.fromTo('.service-card, .doctor-card, .shop-card, .pet-card, .step-item, .review-card',
-        { opacity: 0, y: 20 },
-        { opacity: 1, y: 0, duration: 0.5, stagger: 0.05, ease: 'power3.out', delay: 0.2 }
-    );
+    // Use .from() so they automatically return to their natural opacity: 1 state
+    gsap.from('.hero-anim', { opacity: 0, y: 30, duration: 0.8, stagger: 0.15, ease: 'power3.out' });
+    gsap.from('.reveal-section', { opacity: 0, y: 30, duration: 0.8, stagger: 0.1, ease: 'power3.out' });
+    gsap.from('.service-card, .doctor-card, .shop-card, .pet-card, .step-item, .review-card', { opacity: 0, y: 20, duration: 0.5, stagger: 0.05, ease: 'power3.out', delay: 0.2 });
 }
