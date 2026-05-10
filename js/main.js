@@ -1,10 +1,10 @@
 // ========== INITIALIZATION & SCROLL ==========
 document.addEventListener('DOMContentLoaded', () => {
+    // 1. Setup UI
     updateAuthUI();
     updateCartUI();
 
-    // 1. RENDER ALL CONTENT FIRST
-    // This ensures all products, pets, and calendar days exist in the HTML
+    // 2. Render all dynamic HTML first so it exists on the page
     if (document.getElementById('shop-grid')) renderShop('all');
     if (document.getElementById('pet-grid')) renderPets();
     if (document.getElementById('calendar-days')) {
@@ -12,8 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
         populatePetSelect();
     }
 
-    // 2. RUN ANIMATIONS LAST
-    // A tiny delay ensures the browser has completely finished drawing the new HTML
+    // 3. Add a tiny delay to ensure the browser has finished drawing, then animate!
     setTimeout(() => {
         if (typeof initGSAPAnimations === 'function') {
             initGSAPAnimations();
@@ -21,11 +20,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 100); 
 });
 
-// Navbar Scroll Effect
+// Make the Navbar change colors on scroll
 let lastScroll = 0;
 window.addEventListener('scroll', () => {
     const navbar = document.getElementById('navbar');
-    if (!navbar) return;
+    if (!navbar) return; // Failsafe
     
     const scroll = window.scrollY;
     if (scroll > 50) {
