@@ -1,17 +1,23 @@
 // ========== STATE & LOCAL STORAGE ==========
+// Load state from localStorage so it persists across pages
 let cart = JSON.parse(localStorage.getItem('mypet_cart')) || [];
-let isLoggedIn = localStorage.getItem('token') !== null;
+let currentUser = JSON.parse(localStorage.getItem('mypet_currentUser')) || null;
+let isLoggedIn = currentUser !== null;
 
-let pets = [
+// Initialize Database Arrays in LocalStorage if they don't exist
+if (!localStorage.getItem('mypet_users')) localStorage.setItem('mypet_users', JSON.stringify([]));
+if (!localStorage.getItem('mypet_orders')) localStorage.setItem('mypet_orders', JSON.stringify([]));
+
+// We'll also save custom pets to local storage so they don't disappear on refresh
+const defaultPets = [
     { id: 1, name: 'Max', type: 'Dog', breed: 'Golden Retriever', age: 3, img: 'https://picsum.photos/seed/golden-dog/300/300.jpg', nextVax: '2025-02-15', history: ['Annual checkup - Dec 2024', 'Rabies vaccine - Jun 2024', 'Dental cleaning - Mar 2024'], appointments: ['Grooming - Jan 20, 2025'] },
     { id: 2, name: 'Luna', type: 'Cat', breed: 'Persian', age: 2, img: 'https://picsum.photos/seed/persian-cat/300/300.jpg', nextVax: '2025-03-10', history: ['FVRCP vaccine - Nov 2024', 'Spay surgery - Aug 2024'], appointments: ['Vet Checkup - Feb 5, 2025'] }
 ];
+let pets = JSON.parse(localStorage.getItem('mypet_pets')) || defaultPets;
 
 let calendarDate = new Date();
 let selectedDate = null;
 let selectedTime = null;
-
-const API_URL = '/api';
 
 const shopProducts = [
     { id: 1, name: 'Premium Kibble', category: 'food', price: 29.99, img: 'https://picsum.photos/seed/petfood1/400/400.jpg', desc: 'Grain-free, high-protein formula' },
@@ -46,25 +52,25 @@ function toggleMobileMenu() {
     document.getElementById('mobile-menu').classList.toggle('open');
 }
 
-// ========== AUTH & BACKEND INTEGRATION ==========
+// ========== AUTHENTICATION (LOCAL STORAGE) ==========
 function openAuth(type) {
     document.getElementById('auth-modal').classList.add('open');
     switchAuth(type);
 }
+
 function closeAuth() {
     document.getElementById('auth-modal').classList.remove('open');
 }
+
 function switchAuth(type) {
     if (type === 'login') {
         document.getElementById('login-form').classList.remove('hidden');
         document.getElementById('signup-form').classList.add('hidden');
         document.getElementById('auth-title').textContent = 'Welcome Back';
-        document.getElementById('auth-subtitle').textContent = 'Sign in to manage your pet\'s care';
     } else {
         document.getElementById('login-form').classList.add('hidden');
         document.getElementById('signup-form').classList.remove('hidden');
         document.getElementById('auth-title').textContent = 'Join PawLux';
-        document.getElementById('auth-subtitle').textContent = 'Create an account to get started';
     }
 }
 
@@ -86,69 +92,75 @@ function updateAuthUI() {
 
 function handleLogout() {
     isLoggedIn = false;
-    localStorage.removeItem('token');
+    currentUser = null;
+    localStorage.removeItem('mypet_currentUser');
     updateAuthUI();
     showToast('Logged out successfully.', 'info');
 }
 
-async function handleLogin() {
-    const email = document.getElementById('login-email').value;
-    const password = document.getElementById('login-password').value;
-    if (!email || !password) { showToast('Please fill in all fields', 'error'); return; }
-    
-    try {
-        const res = await fetch(`${API_URL}/auth/login`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, password })
-        });
-        const data = await res.json();
-
-        if (res.ok) {
-            isLoggedIn = true;
-            localStorage.setItem('token', data.token);
-            updateAuthUI();
-            closeAuth();
-            showToast(`Welcome back, ${data.user.name}!`, 'success');
-        } else {
-            showToast(data.message, 'error');
-        }
-    } catch (err) {
-        showToast('Server error. Is the backend running?', 'error');
-    }
-}
-
-async function handleSignup() {
+function handleSignup() {
     const name = document.getElementById('signup-name').value;
     const email = document.getElementById('signup-email').value;
     const phone = document.getElementById('signup-phone').value;
     const password = document.getElementById('signup-password').value;
     
-    if (!name || !email || !password || !phone) { showToast('Please fill in all required fields', 'error'); return; }
+    if (!name || !email || !password || !phone) { 
+        showToast('Please fill in all required fields', 'error'); 
+        return; 
+    }
     
-    try {
-        const res = await fetch(`${API_URL}/auth/register`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name, email, phone, password })
-        });
-        const data = await res.json();
+    // Fetch users array from local storage
+    let users = JSON.parse(localStorage.getItem('mypet_users'));
+    
+    // Check if email already exists
+    if (users.find(u => u.email === email)) {
+        showToast('An account with this email already exists!', 'error');
+        return;
+    }
 
-        if (res.ok) {
-            isLoggedIn = true;
-            localStorage.setItem('token', data.token);
-            updateAuthUI();
-            closeAuth();
-            showToast('Account created successfully!', 'success');
-        } else {
-            showToast(data.message, 'error');
-        }
-    } catch (err) {
-        showToast('Server error. Is the backend running?', 'error');
+    // Save new user
+    const newUser = { name, email, phone, password };
+    users.push(newUser);
+    localStorage.setItem('mypet_users', JSON.stringify(users));
+
+    // Automatically log them in
+    currentUser = newUser;
+    localStorage.setItem('mypet_currentUser', JSON.stringify(newUser));
+    isLoggedIn = true;
+    
+    updateAuthUI();
+    closeAuth();
+    showToast('Account created successfully!', 'success');
+}
+
+function handleLogin() {
+    const email = document.getElementById('login-email').value;
+    const password = document.getElementById('login-password').value;
+    
+    if (!email || !password) { 
+        showToast('Please fill in all fields', 'error'); 
+        return; 
+    }
+    
+    // Fetch users array from local storage
+    let users = JSON.parse(localStorage.getItem('mypet_users'));
+    
+    // Find matching user
+    const user = users.find(u => u.email === email && u.password === password);
+
+    if (user) {
+        currentUser = user;
+        localStorage.setItem('mypet_currentUser', JSON.stringify(user));
+        isLoggedIn = true;
+        updateAuthUI();
+        closeAuth();
+        showToast(`Welcome back, ${user.name}!`, 'success');
+    } else {
+        showToast('Invalid email or password', 'error');
     }
 }
 
-// ========== CART & CHECKOUT ==========
+// ========== CART & CHECKOUT (LOCAL STORAGE) ==========
 function saveCart() {
     localStorage.setItem('mypet_cart', JSON.stringify(cart));
 }
@@ -230,7 +242,7 @@ function updateCartUI() {
     }
 }
 
-async function checkout() {
+function checkout() {
     if (cart.length === 0) return;
     if (!isLoggedIn) {
         showToast('Please login to checkout', 'error');
@@ -238,34 +250,29 @@ async function checkout() {
         return;
     }
 
-    const token = localStorage.getItem('token');
     const totalAmount = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-    const cartItems = cart.map(item => ({ productId: item.id, name: item.name, price: item.price, quantity: item.qty }));
+    
+    // Create new order object
+    const newOrder = {
+        id: Date.now(),
+        customerEmail: currentUser.email,
+        items: [...cart],
+        total: totalAmount,
+        date: new Date().toISOString()
+    };
 
-    try {
-        const res = await fetch(`${API_URL}/orders/checkout`, {
-            method: 'POST',
-            headers: { 
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify({ cartItems, totalAmount })
-        });
-        
-        const data = await res.json();
+    // Save to orders array in LocalStorage
+    let orders = JSON.parse(localStorage.getItem('mypet_orders'));
+    orders.push(newOrder);
+    localStorage.setItem('mypet_orders', JSON.stringify(orders));
 
-        if (res.ok) {
-            showToast('Order placed successfully!', 'success');
-            cart = [];
-            saveCart();
-            updateCartUI();
-            toggleCart();
-        } else {
-            showToast(data.message, 'error');
-        }
-    } catch (err) {
-        showToast('Error processing checkout.', 'error');
-    }
+    // Clear cart and UI
+    cart = [];
+    saveCart();
+    updateCartUI();
+    toggleCart();
+    
+    showToast('Order placed successfully! Thank you.', 'success');
 }
 
 // ========== SHOP ==========
@@ -293,6 +300,7 @@ function renderShop(category) {
         </div>
     `).join('');
 }
+
 function filterShop(category) {
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
     event.target.classList.add('active');
@@ -343,14 +351,17 @@ function renderPets() {
         </div>`;
     }).join('');
 }
+
 function showAddPetForm() {
     document.getElementById('add-pet-form').classList.toggle('hidden');
 }
+
 function addPet() {
     const name = document.getElementById('pet-name-input').value.trim();
     const type = document.getElementById('pet-type-input').value;
     const breed = document.getElementById('pet-breed-input').value.trim();
     const age = document.getElementById('pet-age-input').value;
+    
     if (!name || !breed || !age) { showToast('Please fill in all pet details', 'error'); return; }
     
     const seedMap = { Dog: 'new-dog-pet', Cat: 'new-cat-pet', Bird: 'new-bird-pet', Rabbit: 'new-rabbit-pet' };
@@ -362,7 +373,11 @@ function addPet() {
         history: ['Initial registration'],
         appointments: []
     };
+    
     pets.push(newPet);
+    // Save updated pets to local storage
+    localStorage.setItem('mypet_pets', JSON.stringify(pets));
+    
     renderPets();
     document.getElementById('add-pet-form').classList.add('hidden');
     document.getElementById('pet-name-input').value = '';
@@ -398,18 +413,21 @@ function renderCalendar() {
     document.getElementById('calendar-days').innerHTML = html;
     renderTimeSlots();
 }
+
 function changeMonth(delta) {
     calendarDate.setMonth(calendarDate.getMonth() + delta);
     selectedDate = null;
     selectedTime = null;
     renderCalendar();
 }
+
 function selectDate(y, m, d) {
     selectedDate = new Date(y, m, d);
     document.getElementById('apt-date').value = selectedDate.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
     renderCalendar();
     updateAptSummary();
 }
+
 function renderTimeSlots() {
     const container = document.getElementById('time-slots');
     if(!container) return;
@@ -418,17 +436,20 @@ function renderTimeSlots() {
         return `<button onclick="selectTime('${t}')" class="py-2 px-3 rounded-lg text-xs font-medium transition-all ${isSelected ? 'bg-navy-500 text-ivory-100' : 'bg-ivory-200 text-navy-500 hover:bg-gold-400 hover:text-ivory-100'}">${t}</button>`;
     }).join('');
 }
+
 function selectTime(time) {
     selectedTime = time;
     document.getElementById('apt-time').value = time;
     renderTimeSlots();
     updateAptSummary();
 }
+
 function populatePetSelect() {
     const sel = document.getElementById('apt-pet');
     if(!sel) return;
     sel.innerHTML = '<option value="">Choose your pet</option>' + pets.map(p => `<option value="${p.name}">${p.name} (${p.type} - ${p.breed})</option>`).join('');
 }
+
 function updateAptSummary() {
     const summary = document.getElementById('apt-summary');
     const content = document.getElementById('apt-summary-content');
@@ -451,7 +472,14 @@ function updateAptSummary() {
         summary.classList.add('hidden');
     }
 }
+
 function bookAppointment() {
+    if (!isLoggedIn) {
+        showToast('Please login to book an appointment', 'error');
+        openAuth('login');
+        return;
+    }
+
     const service = document.getElementById('apt-service').value;
     const pet = document.getElementById('apt-pet').value;
     const date = document.getElementById('apt-date').value;
@@ -462,8 +490,12 @@ function bookAppointment() {
         return;
     }
     
+    // Assign appointment to the specific pet
     const petObj = pets.find(p => p.name === pet);
-    if (petObj) petObj.appointments.push(`${service.split(' - ')[0]} - ${date}`);
+    if (petObj) {
+        petObj.appointments.push(`${service.split(' - ')[0]} - ${date}`);
+        localStorage.setItem('mypet_pets', JSON.stringify(pets)); // Save state to local storage
+    }
     
     document.getElementById('apt-service').value = '';
     document.getElementById('apt-pet').value = '';
