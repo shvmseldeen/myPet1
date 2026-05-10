@@ -84,6 +84,7 @@ function updateCartUI() {
 function checkout() {
     if (cart.length === 0) return;
     if (!isLoggedIn) {
+        toggleCart(); // <-- This line closes the cart sidebar!
         showToast('Please login to checkout', 'error');
         openAuth('login');
         return;
