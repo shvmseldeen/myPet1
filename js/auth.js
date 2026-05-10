@@ -29,14 +29,15 @@ function updateAuthUI() {
     const btnSignup = document.getElementById('btn-signup');
     const btnLogout = document.getElementById('btn-logout');
 
+    // Force display states to bypass Tailwind conflicts
     if (isLoggedIn) {
-        if(btnLogin) btnLogin.classList.add('hidden');
-        if(btnSignup) btnSignup.classList.add('hidden');
-        if(btnLogout) btnLogout.classList.remove('hidden');
+        if(btnLogin) btnLogin.style.display = 'none';
+        if(btnSignup) btnSignup.style.display = 'none';
+        if(btnLogout) btnLogout.style.display = 'block';
     } else {
-        if(btnLogin) btnLogin.classList.remove('hidden');
-        if(btnSignup) btnSignup.classList.remove('hidden');
-        if(btnLogout) btnLogout.classList.add('hidden');
+        if(btnLogin) btnLogin.style.display = 'block';
+        if(btnSignup) btnSignup.style.display = 'block';
+        if(btnLogout) btnLogout.style.display = 'none';
     }
 }
 
