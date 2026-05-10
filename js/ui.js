@@ -9,7 +9,7 @@ function showToast(message, type = 'info') {
     const colors = { success: 'bg-green-500', error: 'bg-red-500', info: 'bg-navy-500' };
     
     const toast = document.createElement('div');
-    toast.className = `toast ${colors[type]} text-ivory-100 px-5 py-3 rounded-xl shadow-lg flex items-center gap-3 min-w-[280px]`;
+    toast.className = `toast ${colors[type]} text-ivory-100 px-5 py-3 rounded-xl shadow-lg flex items-center gap-3 min-w-[280px] mb-3`;
     toast.innerHTML = `<i class="fas ${icons[type]}"></i><span class="text-sm font-medium">${message}</span>`;
     container.appendChild(toast);
     
@@ -21,30 +21,24 @@ function showToast(message, type = 'info') {
 }
 
 function initGSAPAnimations() {
+    // Failsafe in case GSAP fails to load from CDN
     if (typeof gsap === 'undefined') return;
-    gsap.registerPlugin(ScrollTrigger);
-    
-    gsap.utils.toArray('.hero-anim').forEach((el, i) => {
-        gsap.from(el, { opacity: 1, y: 0, duration: 0.8, delay: 0.2 + i * 0.15, ease: 'power3.out' });
-    });
-    
-    gsap.utils.toArray('.reveal-section').forEach(section => {
-        gsap.fromTo(section, 
-            { opacity: 0, y: 40 },
-            { 
-                opacity: 1, y: 0, duration: 0.8, ease: 'power3.out',
-                scrollTrigger: { trigger: section, start: 'top 85%', toggleActions: 'play none none none' }
-            }
-        );
-    });
-    
-    gsap.utils.toArray('.service-card, .review-card, .doctor-card, .shop-card, .pet-card, .step-item').forEach((card, i) => {
-        gsap.fromTo(card,
-            { opacity: 0, y: 20 },
-            {
-                opacity: 1, y: 0, duration: 0.6, delay: i % 4 * 0.1, ease: 'power3.out',
-                scrollTrigger: { trigger: card, start: 'top 88%', toggleActions: 'play none none none' }
-            }
-        );
-    });
+
+    // 1. Hero Text Animation
+    gsap.fromTo('.hero-anim', 
+        { opacity: 0, y: 30 }, 
+        { opacity: 1, y: 0, duration: 0.8, stagger: 0.15, ease: 'power3.out' }
+    );
+
+    // 2. Reveal Page Sections immediately (Fixes the blank screen bug)
+    gsap.fromTo('.reveal-section', 
+        { opacity: 0, y: 30 },
+        { opacity: 1, y: 0, duration: 0.8, stagger: 0.1, ease: 'power3.out' }
+    );
+
+    // 3. Stagger all the individual cards to pop in smoothly
+    gsap.fromTo('.service-card, .doctor-card, .shop-card, .pet-card, .step-item, .review-card',
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, duration: 0.5, stagger: 0.05, ease: 'power3.out', delay: 0.2 }
+    );
 }
