@@ -25,7 +25,7 @@ function initGSAPAnimations() {
     gsap.registerPlugin(ScrollTrigger);
     
     gsap.utils.toArray('.hero-anim').forEach((el, i) => {
-        gsap.to(el, { opacity: 1, y: 0, duration: 0.8, delay: 0.2 + i * 0.15, ease: 'power3.out' });
+        gsap.from(el, { opacity: 1, y: 0, duration: 0.8, delay: 0.2 + i * 0.15, ease: 'power3.out' });
     });
     
     gsap.utils.toArray('.reveal-section').forEach(section => {
