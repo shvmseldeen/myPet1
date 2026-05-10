@@ -172,7 +172,12 @@ function saveCart() {
 function toggleCart() {
     const panel = document.getElementById('cart-panel');
     const overlay = document.getElementById('cart-overlay');
-    panel.classList.toggle('open');
+    
+    // Slide the panel in and out using Tailwind classes
+    panel.classList.toggle('translate-x-full');
+    panel.classList.toggle('translate-x-0');
+    
+    // Show/hide the dark background overlay
     overlay.classList.toggle('hidden');
 }
 
