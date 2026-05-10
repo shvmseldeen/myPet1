@@ -29,15 +29,14 @@ function updateAuthUI() {
     const btnSignup = document.getElementById('btn-signup');
     const btnLogout = document.getElementById('btn-logout');
 
-    // Force display states to bypass Tailwind conflicts
     if (isLoggedIn) {
-        if(btnLogin) btnLogin.style.display = 'none';
-        if(btnSignup) btnSignup.style.display = 'none';
-        if(btnLogout) btnLogout.style.display = 'block';
+        if (btnLogin) btnLogin.style.display = 'none';
+        if (btnSignup) btnSignup.style.display = 'none';
+        if (btnLogout) btnLogout.style.display = 'block';
     } else {
-        if(btnLogin) btnLogin.style.display = 'block';
-        if(btnSignup) btnSignup.style.display = 'block';
-        if(btnLogout) btnLogout.style.display = 'none';
+        if (btnLogin) btnLogin.style.display = 'block';
+        if (btnSignup) btnSignup.style.display = 'block';
+        if (btnLogout) btnLogout.style.display = 'none';
     }
 }
 
@@ -60,7 +59,9 @@ function handleSignup() {
         return; 
     }
     
-    let users = JSON.parse(localStorage.getItem('mypet_users'));
+    // SAFETY NET: Default to empty array if storage is totally empty
+    let users = JSON.parse(localStorage.getItem('mypet_users')) || [];
+    
     if (users.find(u => u.email === email)) {
         showToast('An account with this email already exists!', 'error');
         return;
@@ -88,7 +89,8 @@ function handleLogin() {
         return; 
     }
     
-    let users = JSON.parse(localStorage.getItem('mypet_users'));
+    // SAFETY NET: Default to empty array if storage is totally empty
+    let users = JSON.parse(localStorage.getItem('mypet_users')) || [];
     const user = users.find(u => u.email === email && u.password === password);
 
     if (user) {
@@ -99,6 +101,7 @@ function handleLogin() {
         closeAuth();
         showToast(`Welcome back, ${user.name}!`, 'success');
     } else {
-        showToast('Invalid email or password', 'error');
+        // Changed the error message to be more helpful
+        showToast('Invalid email. Did you Sign Up on this website first?', 'error');
     }
 }
