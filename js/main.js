@@ -1,10 +1,11 @@
 // ========== INITIALIZATION & SCROLL ==========
-document.addEventListener('DOMContentLoaded', () => {
-    // 1. Setup UI
+
+// 1. Create a Master Setup Function
+function initializeApp() {
     updateAuthUI();
     updateCartUI();
 
-    // 2. Render all dynamic HTML first so it exists on the page
+    // Render all dynamic HTML first
     if (document.getElementById('shop-grid')) renderShop('all');
     if (document.getElementById('pet-grid')) renderPets();
     if (document.getElementById('calendar-days')) {
@@ -12,19 +13,33 @@ document.addEventListener('DOMContentLoaded', () => {
         populatePetSelect();
     }
 
-    // 3. Add a tiny delay to ensure the browser has finished drawing, then animate!
+    // Failsafe: Force everything to be visible immediately 
+    // just in case the animation library fails to load over the internet
+    document.querySelectorAll('.reveal-section, .service-card, .shop-card, .doctor-card').forEach(el => {
+        el.style.opacity = '1';
+    });
+
+    // Run animations last
     setTimeout(() => {
         if (typeof initGSAPAnimations === 'function') {
             initGSAPAnimations();
         }
-    }, 100); 
-});
+    }, 150); 
+}
 
-// Make the Navbar change colors on scroll
+// 2. BULLETPROOF STARTUP
+// If the browser already finished loading, run immediately. Otherwise, wait for it.
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeApp);
+} else {
+    initializeApp();
+}
+
+// Navbar Scroll Effect
 let lastScroll = 0;
 window.addEventListener('scroll', () => {
     const navbar = document.getElementById('navbar');
-    if (!navbar) return; // Failsafe
+    if (!navbar) return; 
     
     const scroll = window.scrollY;
     if (scroll > 50) {
