@@ -3,8 +3,13 @@ let cart = JSON.parse(localStorage.getItem('mypet_cart')) || [];
 let currentUser = JSON.parse(localStorage.getItem('mypet_currentUser')) || null;
 let isLoggedIn = currentUser !== null;
 
-if (!localStorage.getItem('mypet_users')) localStorage.setItem('mypet_users', JSON.stringify([]));
-if (!localStorage.getItem('mypet_orders')) localStorage.setItem('mypet_orders', JSON.stringify([]));
+// Initialize empty arrays safely
+if (!localStorage.getItem('mypet_users')) {
+    localStorage.setItem('mypet_users', JSON.stringify([]));
+}
+if (!localStorage.getItem('mypet_orders')) {
+    localStorage.setItem('mypet_orders', JSON.stringify([]));
+}
 
 const defaultPets = [
     { id: 1, name: 'Max', type: 'Dog', breed: 'Golden Retriever', age: 3, img: 'https://picsum.photos/seed/golden-dog/300/300.jpg', nextVax: '2025-02-15', history: ['Annual checkup - Dec 2024', 'Rabies vaccine - Jun 2024', 'Dental cleaning - Mar 2024'], appointments: ['Grooming - Jan 20, 2025'] },
